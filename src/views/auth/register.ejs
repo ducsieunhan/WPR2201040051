@@ -5,34 +5,61 @@
     <title>Register</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css" />
 </head>
 
 <body>
-    <div class="container">
-        <h2>Login and register form with Node.js, Express.js and MySQL</h2>
-        <h3>Register form</h3>
-        <form action="/register" method="POST">
-            <div class="form-group mb-3">
-                <label>Full name</label>
-                <input type="text" class="form-control" placeholder="Full name" name="fullName">
+    <div class="wrapper">
+        <h2>Registration</h2>
+
+        <form action="/auth/register" method="POST" onsubmit="return validate()">
+            <div class="input-box">
+                <input type="text" placeholder="Enter your name" name="fullName" required
+                    value="<%= data.fullName ? data.fullName : '' %>">
             </div>
-            <div class="form-group mb-3">
-                <label>Email</label>
-                <input type="text" class="form-control" placeholder="Email" name="email">
+            <div class="input-box">
+                <input type="text" placeholder="Enter your email" name="email" required
+                    value="<%= data.email ? data.email : '' %>">
             </div>
-            <div class="form-group mb-3">
-                <label>Password</label>
-                <input type="password" class="form-control" placeholder="Password" name="password">
+            <div class="input-box">
+                <input type="password" placeholder="Create password" name="password" id="password" required>
             </div>
-            <div class="form-group mb-3">
-                <label>Password Confirm</label>
-                <input type="password" class="form-control" placeholder="Confirm Password" name="passwordConfirm ">
+            <div class="input-box">
+                <input type="password" placeholder="Confirm password" name="passwordConfirm" id="password_confirm"
+                    required>
             </div>
-            <div class="d-grid mt-3">
-                <button type="submit" class="btn btn-primary form-control">Submit</button>
+            <div class="policy">
+                <input type="checkbox">
+                <h3>I accept all terms & conditions</h3>
             </div>
+            <% if (message) { %>
+                <div id="error">
+                    <h3 style="color: red;">
+                        <%= message %>
+                    </h3>
+                </div>
+                <% } %>
+                    <div id="error"></div>
+                    <div class="input-box button">
+                        <input type="Submit" value="Register Now">
+                    </div>
         </form>
     </div>
 </body>
+
+<script>
+    function validate() {
+        const password = document.getElementById("password");
+        const passwordConfirm = document.getElementById("password_confirm");
+        if (password.value !== passwordConfirm.value) {
+            document.getElementById("error").innerHTML = `<h3 style="color: red">Please check your confirm password!!!</h3>`;
+            return false;
+        } else if (password.value.length < 6) {
+            document.getElementById("error").innerHTML = `<h3 style="color: red">Your password is too short!!!!!!</h3>`;
+            return false;
+        }
+        return true;
+    }
+</script>
 
 </html>

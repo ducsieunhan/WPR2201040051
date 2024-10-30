@@ -1,14 +1,25 @@
 const express = require('express');
-
+const { authMiddleware } = require('../middlewares/authMiddleware');
 const authController = require('../controllers/authController');
 const router = express.Router();
 
 router.get('/login', (req, res) => {
-    res.render("/auth/login");
+    res.render('auth/login', { message: '', data: {} });
 })
 
 router.get('/register', (req, res) => {
-    res.render("/auth/register");
+    res.render('auth/register', { message: '', data: {} });
+})
+
+router.get('/homepage', authMiddleware, (req, res) => {
+    res.render('auth/homepage', { userName: res.locals.userName });
+})
+
+router.get('/outbox', authMiddleware, (req, res) => {
+    res.render('auth/outbox', { message: '', data: {} });
+})
+router.get('/compose', authMiddleware, (req, res) => {
+    res.render('auth/compose', { message: '', data: {} });
 })
 
 router.post('/login', authController.login);

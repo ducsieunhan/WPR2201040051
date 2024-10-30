@@ -5,8 +5,13 @@ const findUserByEmail = async (email) => {
     return rows[0];
 }
 
+const findUserById = async (id) => {
+    const [rows] = await db.query('SELECT * FROM user WHERE id = ? ', [id]);
+    return rows[0];
+}
+
 const createNewUser = async (fullName, email, password) => {
-    var sql = `INSERT INTO users (full_name, email, password) 
+    var sql = `INSERT INTO user (full_name, email, password) 
                 VALUES (?, ?, ?)`;
 
     const [result] = await db.query(sql, [fullName, email, password]);
@@ -14,4 +19,4 @@ const createNewUser = async (fullName, email, password) => {
     return result.insertId;
 }
 
-module.exports = { findUserByEmail, createNewUser }; 
+module.exports = { findUserByEmail, createNewUser, findUserById }; 
