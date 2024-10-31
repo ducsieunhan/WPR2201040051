@@ -11,17 +11,6 @@ router.get('/register', (req, res) => {
     res.render('auth/register', { message: '', data: {} });
 })
 
-router.get('/homepage', authMiddleware, (req, res) => {
-    res.render('auth/homepage', { userName: res.locals.userName });
-})
-
-router.get('/outbox', authMiddleware, (req, res) => {
-    res.render('auth/outbox', { message: '', data: {} });
-})
-router.get('/compose', authMiddleware, (req, res) => {
-    res.render('auth/compose', { message: '', data: {} });
-})
-
 router.post('/login', authController.login);
 router.post('/register', authController.register);
 router.post('/logout', authController.logout);

@@ -7,6 +7,22 @@ const authMiddleware = (req, res, next) => {
     next();
 }
 
+const getAllUsers = async (req, res, next) => {
+    try {
+        if (req.cookies.userId) {
+            const currentUserId = req.cookies.userId;
+            const users = await userModel.getAllUserNames(currentUserId);
+            res.locals.users = users;
+        } else {
+            res.locals.users = null;
+        }
+        next();
+    } catch (err) {
+        res.locals.userName = null;
+        next();
+    }
+}
+
 const checkUser = async (req, res, next) => {
     try {
         if (req.cookies.userId) {
@@ -27,4 +43,4 @@ const checkUser = async (req, res, next) => {
 }
 
 
-module.exports = { authMiddleware, checkUser }; 
+module.exports = { authMiddleware, checkUser, getAllUsers }; 

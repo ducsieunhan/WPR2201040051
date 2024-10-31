@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <!-- My CSS -->
+    <link rel="stylesheet" href="/css/homepage.css">
+
+    <title>AdminHub</title>
+</head>
+
+<style>
+    .email-list {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .email-item {
+        display: flex;
+        padding: 12px 20px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+    }
+
+    .email-item:hover {
+        background: #f8f9fa;
+    }
+
+    .sender-name {
+        width: 200px;
+        font-weight: bold;
+    }
+
+    .email-content {
+        flex: 1;
+    }
+
+    .email-subject {
+        font-weight: 500;
+    }
+
+    .email-timestamp {
+        width: 150px;
+        color: #666;
+        text-align: right;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        gap: 10px;
+    }
+
+    .pagination a {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        text-decoration: none;
+        color: #333;
+    }
+
+    .pagination a.active {
+        background: #007bff;
+        color: white;
+        border-color: #007bff;
+    }
+
+    .pagination a:hover:not(.active) {
+        background: #f8f9fa;
+    }
+</style>
+
+<body>
+
+    <%- include('layout/sidebar') %>
+
+
+        <!-- CONTENT -->
+        <section id="content">
+
+            <%- include('layout/navbar') %>
+                <!-- MAIN -->
+                <main>
+                    <div class="head-title">
+                        <div class="left">
+                            <h1>Dashboard</h1>
+                            <ul class="breadcrumb">
+                                <li>
+                                    <a href="#">Dashboard</a>
+                                </li>
+                                <li><i class='bx bx-chevron-right'></i></li>
+                                <li>
+                                    <a class="active" href="#">Home</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <a href="#" class="btn-download">
+                            <i class='bx bxs-cloud-download'></i>
+                            <span class="text">Download PDF</span>
+                        </a>
+                    </div>
+
+                    <div class="table-data">
+                        <div class="order">
+                            <div class="head">
+                                <h3>Recent Inbox</h3>
+                                <i class='bx bx-search'></i>
+                                <i class='bx bx-trash'></i>
+                            </div>
+                            <div class="email-list">
+                                <% if(emails && emails.length> 0) { %>
+                                    <% emails.forEach(email=> { %>
+                                        <div class="email-item">
+                                            <input type="checkbox" class="mail-checkbox">
+                                            <div class="sender-name">
+                                                <%= email.sender_name %>
+                                            </div>
+                                            <div class="email-content">
+                                                <a href="/detail/<%= email.id %>">
+                                                    <span class="email-subject">
+                                                        <%= email.subject %>
+                                                    </span>
+                                                </a>
+                                            </div>
+                                            <div class="email-timestamp">
+                                                <%= email.formatted_time %>
+                                            </div>
+                                        </div>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <div class="email-item">No emails found</div>
+                                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pagination">
+                        <!-- <% if(totalPages> 1) { %>
+                            <% if(currentPage> 1) { %>
+                                <a href="?page=1">First</a>
+                                <a href="?page=<%= currentPage - 1 %>">Previous</a>
+                                <% } %> -->
+
+                        <% if (currentPage> 1) { %>
+                            <a href="?page=<%= currentPage - 1 %>">Last</a>
+                            <% } %>
+
+                                <% for (let i=1; i <=totalPages; i++) { %>
+                                    <a href="?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>">
+                                        <%= i %>
+                                    </a>
+                                    <% } %>
+
+                                        <% if (currentPage < totalPages) { %>
+                                            <a href="?page=<%= currentPage + 1 %>">Next</a>
+                                            <% } %>
+                                                <!-- <% if(currentPage < totalPages) { %>
+                                                <a href="?page=<%= currentPage + 1 %>">Next</a>
+                                                <a href="?page=<%= totalPages %>">Last</a>
+                                                <% } %>
+                                                    <% } %> -->
+                    </div>
+
+                </main>
+                <!-- MAIN -->
+        </section>
+        <!-- CONTENT -->
+
+
+        <script src="/js/script.js"></script>
+</body>
+
+</html>

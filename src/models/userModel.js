@@ -19,4 +19,10 @@ const createNewUser = async (fullName, email, password) => {
     return result.insertId;
 }
 
-module.exports = { findUserByEmail, createNewUser, findUserById }; 
+const getAllUserNames = async (exceptMe) => {
+    var sql = `SELECT id, email FROM user WHERE id != ?`;
+    const [users] = await db.query(sql, exceptMe);
+    return users;
+}
+
+module.exports = { findUserByEmail, createNewUser, findUserById, getAllUserNames }; 

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <!-- My CSS -->
+    <link rel="stylesheet" href="/css/homepage.css">
+
+    <title>AdminHub</title>
+</head>
+
+<style>
+    .compose-container {
+        width: 90%;
+        max-width: 650px;
+        margin: 20px auto;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 15px;
+        font-family: Arial, sans-serif;
+    }
+
+    .input-field,
+    .select-field {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-weight: 600;
+    }
+
+    .message-area {
+        width: 100%;
+        height: 300px;
+        margin-bottom: 10px;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        resize: none;
+        box-sizing: border-box;
+    }
+
+    .button-container {
+        display: flex;
+        gap: 10px;
+    }
+
+    .send-button {
+        background-color: #1a73e8;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .attach-button {
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .send-button:hover {
+        background-color: #1557b0;
+        transform: scale(1.1);
+        transition: all 0.4s;
+    }
+
+    .attach-button:hover {
+        background-color: #f1f1f1;
+    }
+
+    .error-message {
+        color: #dc3545;
+        margin-bottom: 10px;
+        display: none;
+    }
+
+    .success-message {
+        color: #28a745;
+        margin-bottom: 10px;
+        display: none;
+    }
+</style>
+
+
+<body>
+
+    <%- include('layout/sidebar') %>
+
+
+        <!-- CONTENT -->
+        <section id="content">
+
+            <%- include('layout/navbar') %>
+                <!-- MAIN -->
+
+                <main>
+                    <div class="head-title">
+                        <div class="left">
+                            <h1>Dashboard</h1>
+                            <ul class="breadcrumb">
+                                <li>
+                                    <a href="#">Dashboard</a>
+                                </li>
+                                <li><i class='bx bx-chevron-right'></i></li>
+                                <li>
+                                    <a class="active" href="#">Compose</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="table-data">
+                        <div class="order">
+                            <div class="head">
+                                <h3>New Message</h3>
+                            </div>
+                            <form action="/compose" method="POST" class="compose-container">
+                                <select name="receiverId" class="select-field" required>
+                                    <option value="">To</option>
+                                    <% users.forEach(user=> { %>
+                                        <option value="<%= user.id %>">
+                                            <%= user.email %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                                <div class="error-message" id="recipient-error">Please select a recipient</div>
+
+                                <input type="text" class="input-field" placeholder="Subject" name="subject">
+                                <textarea class="message-area" name="body"></textarea>
+                                <div class="button-container">
+                                    <button class="send-button" type="submit">Send</button>
+                                    <div class="attach-button">
+                                        <input type="file" name="attachment" id="file-input" style="display: none">
+                                        <label for="file-input">Attach file</label>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- /.modal -->
+                        </div>
+                    </div>
+
+                    </div>
+                </main>
+
+
+
+                <!-- MAIN -->
+        </section>
+        <!-- CONTENT -->
+
+
+        <script src="/js/script.js"></script>
+</body>
+
+</html>
