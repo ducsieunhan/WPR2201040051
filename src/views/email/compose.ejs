@@ -124,7 +124,8 @@
                             <div class="head">
                                 <h3>New Message</h3>
                             </div>
-                            <form action="/compose" method="POST" class="compose-container">
+                            <form action="/compose" method="POST" class="compose" enctype="multipart/form-data"
+                                class="compose-container">
                                 <select name="receiverId" class="select-field" required>
                                     <option value="">To</option>
                                     <% users.forEach(user=> { %>
@@ -140,10 +141,13 @@
                                 <div class="button-container">
                                     <button class="send-button" type="submit">Send</button>
                                     <div class="attach-button">
-                                        <input type="file" name="attachment" id="file-input" style="display: none">
+                                        <input type="file" name="attachments" id="file-input" multiple
+                                            accept=".jpg,.jpeg,.png,.pdf,.txt,.doc,.docx,.xls,.xlsx"
+                                            style="display: none">
                                         <label for="file-input">Attach file</label>
                                     </div>
                                 </div>
+                                <div id="files" class="files"></div>
                             </form>
                             <!-- /.modal -->
                         </div>
@@ -159,7 +163,21 @@
         <!-- CONTENT -->
 
 
+        <script>
+            document.getElementById('file-input').addEventListener('change', function (e) {
+                const filesDiv = document.getElementById('files');
+                filesDiv.innerHTML = '';
+
+                Array.from(this.files).forEach(file => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.textContent = `${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+                    filesDiv.appendChild(fileItem);
+                });
+            });
+        </script>
         <script src="/js/script.js"></script>
+
 </body>
 
 </html>

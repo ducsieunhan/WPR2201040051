@@ -6,6 +6,8 @@ const configViewEngine = require('./src/config/viewEngine');
 const { authMiddleware, checkUser, getAllUsers } = require('./src/middlewares/authMiddleware');
 const app = express();
 
+app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 

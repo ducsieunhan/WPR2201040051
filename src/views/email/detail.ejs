@@ -25,7 +25,8 @@
     }
 
     .input-field,
-    .select-field {
+    .select-field,
+    .attach-field {
         width: 100%;
         margin-bottom: 10px;
         padding: 8px;
@@ -135,12 +136,37 @@
                             <h3 type="text" class="input-field" name="subject" disabled>Subject : <%=
                                     emailDetail.subject %>
                             </h3>
+
+
+
                             <textarea class="message-area" name="body" disabled
                                 style="font-size: 16px;"><%= emailDetail.body %></textarea>
+
+                            <div class="attach-field">
+                                <h3>Attachments:</h3>
+
+                                <ul>
+                                    <% if (emailDetail.attachment && emailDetail.attachment.length> 0) { %>
+                                        <% emailDetail.attachment.forEach(file=> { %>
+                                            <li>
+                                                <a style="font-weight: 500;" href="<%= file.path %>"
+                                                    download="<%= file.originalname %>">
+                                                    <%= file.originalname %>
+                                                </a>
+                                            </li>
+                                            <% }) %>
+                                                <% } else { %>
+                                                    <p>No attachments available</p>
+                                                    <% } %>
+                                </ul>
+                            </div>
                             <div class=" button-container">
                                 <button class="send-button" type="submit">Reply</button>
                             </div>
+
+
                             <!-- /.modal -->
+
                         </div>
                     </div>
 
