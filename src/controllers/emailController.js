@@ -90,7 +90,7 @@ const outbox = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const { emails, totalPages, currentPage } = await emailModel.getEmailSender(currentUserId, page);
     // console.log('Emails:', emails);
-    res.render('email/homepage', { emails, totalPages, currentPage, userName: res.locals.userName });
+    res.render('email/outbox', { emails, totalPages, currentPage, userName: res.locals.userName });
 };
 
 

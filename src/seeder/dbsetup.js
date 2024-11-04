@@ -1,5 +1,4 @@
 const db = require('../models/db');
-// const bcrypt = require('bcrypt');
 
 async function setUpDB() {
     try {

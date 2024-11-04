@@ -10,7 +10,7 @@
     <!-- My CSS -->
     <link rel="stylesheet" href="/css/homepage.css">
 
-    <title>AdminHub</title>
+    <title>Inbox page</title>
 </head>
 
 <style>
@@ -22,7 +22,7 @@
 
     .email-item {
         display: flex;
-        padding: 12px 20px;
+        padding: 20px 20px;
         border-bottom: 1px solid #eee;
         cursor: pointer;
     }
@@ -45,7 +45,7 @@
     }
 
     .email-timestamp {
-        width: 150px;
+        /* width: 150px; */
         color: #666;
         text-align: right;
     }
@@ -164,7 +164,7 @@
                                 <% if(emails && emails.length> 0) { %>
                                     <% emails.forEach(email=> { %>
                                         <div class="email-item" data-email-id="<%= email.id %>">
-                                            <input type="checkbox" class="mail-checkbox">
+                                            <div><input type="checkbox" class="mail-checkbox"></div>
                                             <div class="sender-name">
                                                 <%= email.sender_name %>
                                             </div>
@@ -244,7 +244,7 @@
                     console.log('Selected emailsId:', emailsId);
 
                     try {
-                        const response = await fetch('/delete', {
+                        const response = await fetch('/delete-receiver', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ emailsId })

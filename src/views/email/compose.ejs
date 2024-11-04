@@ -125,7 +125,7 @@
                                 <h3>New Message</h3>
                             </div>
                             <form action="/compose" method="POST" class="compose" enctype="multipart/form-data"
-                                class="compose-container">
+                                class="compose-container" onsubmit="return validate()">
                                 <select name="receiverId" class="select-field" required>
                                     <option value="">To</option>
                                     <% users.forEach(user=> { %>
@@ -136,8 +136,10 @@
                                 </select>
                                 <div class="error-message" id="recipient-error">Please select a recipient</div>
 
-                                <input type="text" class="input-field" placeholder="Subject" name="subject">
+                                <input type="text" class="input-field " id="subject" placeholder="Subject"
+                                    name="subject">
                                 <textarea class="message-area" name="body"></textarea>
+                                <div id="error"></div>
                                 <div class="button-container">
                                     <button class="send-button" type="submit">Send</button>
                                     <div class="attach-button">
@@ -175,6 +177,15 @@
                     filesDiv.appendChild(fileItem);
                 });
             });
+
+            // function validate() {
+            //     const subject = document.getElementById("subject");
+            //     if (subject.value.length === 0) {
+            //         document.getElementById("subject").value = 'No Subject';
+            //         return false;
+            //     }
+            //     return true;
+            // }
         </script>
         <script src="/js/script.js"></script>
 

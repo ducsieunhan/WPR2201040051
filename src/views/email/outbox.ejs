@@ -10,7 +10,7 @@
     <!-- My CSS -->
     <link rel="stylesheet" href="/css/homepage.css">
 
-    <title>AdminHub</title>
+    <title>Outbox page</title>
 </head>
 
 <style>
@@ -22,7 +22,7 @@
 
     .email-item {
         display: flex;
-        padding: 12px 20px;
+        padding: 20px 20px;
         border-bottom: 1px solid #eee;
         cursor: pointer;
     }
@@ -45,7 +45,7 @@
     }
 
     .email-timestamp {
-        width: 150px;
+        /* width: 150px; */
         color: #666;
         text-align: right;
     }
@@ -73,6 +73,48 @@
 
     .pagination a:hover:not(.active) {
         background: #f8f9fa;
+    }
+
+    .email-actions {
+        display: flex;
+        gap: 10px;
+        margin-right: 15px;
+    }
+
+    .btn-delete {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 4px;
+        background-color: #dc3545;
+        color: white;
+        cursor: pointer;
+    }
+
+    .btn-delete:disabled {
+        background-color: #dc354580;
+        cursor: not-allowed;
+    }
+
+    .btn-delete:not(:disabled):hover {
+        background-color: #c82333;
+    }
+
+    .mail-checkbox {
+        margin-right: 15px;
+    }
+
+    .email-item.removing {
+        animation: slideOut 0.3s forwards;
+    }
+
+    @keyframes slideOut {
+        to {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
     }
 </style>
 
@@ -111,15 +153,20 @@
                             <div class="head">
                                 <h3>Recent Outbox</h3>
                                 <i class='bx bx-search'></i>
-                                <i class='bx bx-trash'></i>
+                                <div class="email-actions">
+                                    <button id="deleteEmails" class="btn-delete" disabled>
+                                        <i class='bx bx-trash'></i>
+                                        Delete
+                                    </button>
+                                </div>
                             </div>
                             <div class="email-list">
                                 <% if(emails && emails.length> 0) { %>
                                     <% emails.forEach(email=> { %>
-                                        <div class="email-item">
-                                            <input type="checkbox" class="mail-checkbox">
+                                        <div class="email-item" data-email-id="<%= email.id %>">
+                                            <div><input type="checkbox" class="mail-checkbox"></div>
                                             <div class="sender-name">
-                                                <%= email.sender_name %>
+                                                <%= email.receiver_name %>
                                             </div>
                                             <div class="email-content">
                                                 <a href="/detail/<%= email.id %>">
@@ -174,6 +221,59 @@
 
 
         <script src="/js/script.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const deleteButton = document.getElementById('deleteEmails');
+                const checkboxes = document.querySelectorAll('.mail-checkbox');
+
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', updateDeleteButton);
+                });
+
+                function updateDeleteButton() {
+                    const checkedBoxes = document.querySelectorAll('.mail-checkbox:checked');
+                    deleteButton.disabled = checkedBoxes.length === 0;
+                }
+
+                deleteButton.addEventListener('click', async () => {
+                    const checkedEmails = document.querySelectorAll('.mail-checkbox:checked');
+                    const emailsId = Array.from(checkedEmails).map(checkbox =>
+                        checkbox.closest('.email-item').dataset.emailId
+                    );
+
+                    console.log('Selected emailsId:', emailsId);
+
+                    try {
+                        const response = await fetch('/delete-sender', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ emailsId })
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            emailsId.forEach(id => {
+                                const emailItem = document.querySelector(`.email-item[data-email-id="${id}"]`);
+                                if (emailItem) {
+                                    emailItem.classList.add('removing');
+                                    setTimeout(() => {
+                                        emailItem.remove();
+                                        updateDeleteButton();
+                                    }, 300);
+                                }
+                            });
+                        }
+                    } catch (error) {
+                        console.error('Error deleting emails:', error);
+                        alert('Failed to delete emails. Please try again.');
+                    }
+                });
+
+                updateDeleteButton();
+            });
+
+        </script>
 </body>
 
 </html>

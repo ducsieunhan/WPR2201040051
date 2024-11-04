@@ -2,7 +2,7 @@ const userModel = require('../models/userModel');
 
 const authMiddleware = (req, res, next) => {
     if (!req.cookies.userId) {
-        return res.redirect('/auth/login');
+        return res.redirect('/auth/error403');
     }
     next();
 }

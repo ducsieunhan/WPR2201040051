@@ -15,21 +15,35 @@ router.get('/detail/:id', authMiddleware, emailController.viewDetailEmail);
 
 router.post('/compose', authMiddleware, emailController.sendEmail);
 
-router.post('/delete', authMiddleware, async (req, res) => {
+router.post('/delete-receiver', authMiddleware, async (req, res) => {
     try {
         const { emailsId } = req.body;
-        console.log(emailsId);
+        console.log('here is delete receiver: ' + emailsId);
 
         const currentUserId = req.cookies.userId;
 
-        const deletedEmails = await emailModel.deleteEmails(emailsId, currentUserId);
+        const deletedEmails = await emailModel.deleteEmailsFromReceiver(emailsId, currentUserId);
         res.json({ success: true, deletedEmails });
     } catch (error) {
         console.error('Error deleting emails:', error);
         res.status(500).json({ success: false, error: 'Failed to delete emails' });
     }
-
-
 })
+
+router.post('/delete-sender', authMiddleware, async (req, res) => {
+    try {
+        const { emailsId } = req.body;
+        console.log('here is delete sender: ' + emailsId);
+
+        const currentUserId = req.cookies.userId;
+
+        const deletedEmails = await emailModel.deleteEmailsFromSender(emailsId, currentUserId);
+        res.json({ success: true, deletedEmails });
+    } catch (error) {
+        console.error('Error deleting emails:', error);
+        res.status(500).json({ success: false, error: 'Failed to delete emails' });
+    }
+})
+
 
 module.exports = router;  
