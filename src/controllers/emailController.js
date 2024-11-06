@@ -48,7 +48,7 @@ const sendEmail = async (req, res) => {
         // console.log( req.body);
 
         try {
-            const { receiverId, subject, body } = req.body;
+            let { receiverId, subject, body } = req.body;
             const senderId = req.cookies.userId;
 
             let attachment = null;
@@ -60,8 +60,11 @@ const sendEmail = async (req, res) => {
                 })));
             }
 
+            if (!subject) subject = "No Subject";
+
+
             await emailModel.createNewEmail(senderId, receiverId, subject, body, attachment, new Date());
-            res.redirect('/outbox');
+            res.redirect('/outbox/?success=true');
         } catch (error) {
             console.log('Error sending email: ' + error);
             res.status(500).json({ error: 'Error sending email' });
@@ -90,7 +93,8 @@ const outbox = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const { emails, totalPages, currentPage } = await emailModel.getEmailSender(currentUserId, page);
     // console.log('Emails:', emails);
-    res.render('email/outbox', { emails, totalPages, currentPage, userName: res.locals.userName });
+    const success = req.query.success === 'true';
+    res.render('email/outbox', { emails, totalPages, currentPage, userName: res.locals.userName, success });
 };
 
 

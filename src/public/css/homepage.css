@@ -81,7 +81,7 @@ body {
     align-items: center;
     justify-content: center;
     color: var(--blue);
-    position: sticky;
+    position: absolute;
     top: 0;
     left: 0;
     background: var(--light);
@@ -98,7 +98,7 @@ body {
 
 #sidebar .side-menu {
     width: 100%;
-    margin-top: 48px;
+    margin-top: 130px;
 }
 
 #sidebar .side-menu li {

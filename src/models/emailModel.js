@@ -8,14 +8,16 @@ const getEmailsByUserId = async (receiverID, page = 1, limit = 5) => {
         DATE_FORMAT(e.timestamp, '%M %d, %Y %h:%i %p') as formatted_time
         FROM emails e
         JOIN user u ON e.sender_id = u.id
-        WHERE e.receiver_id = ? AND receiver_id <> 13     
+        LEFT JOIN delete_emails d ON e.id = d.email_id
+        WHERE e.receiver_id = ? AND (d.receiver_deleted IS NULL OR d.receiver_deleted = FALSE)     
         ORDER BY e.timestamp DESC
         LIMIT ? OFFSET ?
     `;
     const countSql = `
     SELECT COUNT(*) as total 
-    FROM emails 
-    WHERE receiver_id = ? AND receiver_Id <> 13 
+    FROM emails e
+    LEFT JOIN delete_emails d ON e.id = d.email_id
+    WHERE e.receiver_id = ? AND (d.receiver_deleted IS NULL OR d.receiver_deleted = FALSE) 
     `;
 
     const [emails] = await db.query(sql, [receiverID, limit, offset]);
@@ -63,14 +65,17 @@ const getEmailSender = async (senderId, page = 1, limit = 5) => {
         DATE_FORMAT(e.timestamp, '%M %d, %Y %h:%i %p') as formatted_time
         FROM emails e
         JOIN user u ON e.receiver_id = u.id
-        WHERE e.sender_id = ? AND e.sender_id <> 14
+        LEFT JOIN delete_emails d ON e.id = d.email_id
+        WHERE e.sender_id = ? 
+        AND (d.sender_deleted IS NULL OR d.sender_deleted = FALSE)
         ORDER BY e.timestamp DESC
         LIMIT ? OFFSET ?
     `;
     const countSql = `
     SELECT COUNT(*) as total 
-    FROM emails 
-    WHERE sender_id = ? AND sender_id <> 14
+    FROM emails e
+    LEFT JOIN delete_emails d ON e.id = d.email_id
+    WHERE sender_id = ? AND (d.sender_deleted IS NULL OR d.sender_deleted = FALSE)
     `;
 
     const [emails] = await db.query(sql, [senderId, limit, offset]);
@@ -83,22 +88,25 @@ const getEmailSender = async (senderId, page = 1, limit = 5) => {
     return { emails, totalPages: Math.ceil(totalEmail / limit), currentPage: page };
 }
 
-const deleteEmailsFromReceiver = async (emailsId, userId) => {
-    const sql = `UPDATE emails SET receiver_id = 13
-    WHERE id IN (?) AND receiver_id = ?` ;
+const deleteEmailsFromReceiver = async (emailsId, receiverID) => {
+    const sql = `INSERT INTO delete_emails (email_id, receiver_deleted) values (?, TRUE)
+    ON DUPLICATE KEY UPDATE receiver_deleted = TRUE` ;
 
-    const [result] = await db.query(sql, [emailsId, userId]);
-    return result.affectedRows;
+    const promises = emailsId.map(emailId => db.query(sql, [emailId]));
+    await Promise.all(promises);
+    // const [result] = await db.query(sql, [emailsId, userId]);
+    // return result.affectedRows;
 }
 
 const deleteEmailsFromSender = async (emailsId, userId) => {
-    const sql = `UPDATE emails SET sender_id = 14
-    WHERE id IN (?) AND sender_id = ?` ;
+    const sql = `INSERT INTO delete_emails (email_id, sender_deleted) values (?, TRUE)
+    ON DUPLICATE KEY UPDATE sender_deleted = TRUE` ;
+    // console.log("Here is model: " + emailsId);
 
-    console.log("Here is model: " + emailsId);
-
-    const [result] = await db.query(sql, [emailsId, userId]);
-    return result.affectedRows;
+    const promises = emailsId.map(emailId => db.query(sql, [emailId]));
+    await Promise.all(promises);
+    // const [result] = await db.query(sql, [emailsId, userId]);
+    // return result.affectedRows;
 }
 
 

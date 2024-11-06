@@ -12,7 +12,7 @@ const register = async (req, res) => {
         });
     }
     await userModel.createNewUser(fullName, email, password);
-    res.redirect('/auth/login');
+    res.redirect('/auth/login?success=true');
 }
 
 const login = async (req, res) => {

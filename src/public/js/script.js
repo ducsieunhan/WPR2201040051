@@ -19,9 +19,11 @@ document.addEventListener("DOMContentLoaded", function () {
 // TOGGLE SIDEBAR
 const menuBar = document.querySelector('#content nav .bx.bx-menu');
 const sidebar = document.getElementById('sidebar');
+const logoutSection = document.querySelector('.side-menu-delte');
 
 menuBar.addEventListener('click', function () {
     sidebar.classList.toggle('hide');
+    logoutSection.style.display = logoutSection.style.display === 'none' ? 'block' : 'none';
 })
 
 

@@ -4,7 +4,8 @@ const authController = require('../controllers/authController');
 const router = express.Router();
 
 router.get('/login', (req, res) => {
-    res.render('auth/login', { message: '', data: {} });
+    const success = req.query.success === 'true';
+    res.render('auth/login', { message: '', data: {}, success });
 })
 
 router.get('/register', (req, res) => {

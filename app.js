@@ -4,6 +4,7 @@ const authRoutes = require('./src/routes/authRoutes');
 const emailRoutes = require('./src/routes/emailRoutes');
 const configViewEngine = require('./src/config/viewEngine');
 const { authMiddleware, checkUser, getAllUsers } = require('./src/middlewares/authMiddleware');
+const setUpDB = require('./src/seeder/dbsetup');
 const app = express();
 
 app.use(express.json());
@@ -19,6 +20,10 @@ configViewEngine(app);
 app.use('/auth', authRoutes);
 app.use('/', emailRoutes);
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
-    console.log(`Server đang chạy tại http://localhost:${PORT}`);
+setUpDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server đang chạy tại http://localhost:${PORT}`);
+    });
+}).catch(err => {
+    console.error('Error setting up the database:', err);
 });

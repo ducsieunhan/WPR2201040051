@@ -1,33 +1,38 @@
 <!-- SIDEBAR -->
 <section id="sidebar">
     <a href="#" class="brand">
-        <span class="text">Email</span>
+        <i class='bx bx-mail-send'></i>
+        <span class="text">Mails</span>
     </a>
     <ul class="side-menu top">
         <li class="active">
             <a href="/homepage">
-                <i class='bx bxs-dashboard'></i>
+                <i class='bx bxs-inbox'></i>
                 <span class="text">Inbox</span>
             </a>
         </li>
         <li>
             <a href="/outbox">
-                <i class='bx bxs-shopping-bag-alt'></i>
+                <i class='bx bxs-send'></i>
                 <span class="text">Outbox</span>
             </a>
         </li>
         <li>
             <a href="/compose">
-                <i class='bx bxs-doughnut-chart'></i>
+                <i class='bx bxs-edit'></i>
                 <span class="text">Compose</span>
             </a>
         </li>
+
+    </ul>
+
+    <ul class="side-menu-delte" style="color: red; margin-left: 22px;">
         <li>
             <form action="/auth/logout" method="POST">
                 <div class="input-box button logout">
                     <i class='bx bxs-log-out-circle'></i>
-                    <input type="Submit" value="Login"
-                        style="background-color:white ; color: red; border: none; font-size: 20px; cursor: pointer;">
+                    <input type="Submit" value="Logout"
+                        style="background-color: var(--light); color: red; border: none; font-size: 20px; cursor: pointer;">
                 </div>
             </form>
         </li>
